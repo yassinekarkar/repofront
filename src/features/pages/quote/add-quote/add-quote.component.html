@@ -1,0 +1,158 @@
+<body>
+  <h4>Add Quote</h4>
+  <form [formGroup]="form" (ngSubmit)="addQuote()">
+    
+      <div class="form-group">
+        <!-- fromConrtrole name bech tji 3al select  select :  option bech ikoun feha l id wl espace win tekteb bech ikoun feha {{}}-->
+
+        <label for="cars">Client:</label>
+
+        <select class="form-control col-lg-8" (change)="onChangeClient($event)" required>
+          <option *ngFor="let client of clientsList" [value]="client.code">
+            {{client.name}}
+          </option>
+        </select>
+        <br> <br>
+        <div>
+          <p> {{userInfo.firstname}} {{userInfo.lastname}}</p>
+          <p>{{userInfo.mail}}</p>
+        </div>
+
+
+        <br> <br>
+        <div class="form-group">
+          <label for="estimateNumber">Numéro de devis</label>
+          <input id="estimateNumber" type="text" formControlName="estimateNumber">
+          <br> <br>
+
+          <label for="date">Date</label>
+          <input id="dateBegin" type="date" formControlName="dateBegin">
+          <br> <br>
+
+          <label for="date">Date de validité</label>
+          <input id="dateBegin" type="date" formControlName="dateBegin">
+          <br> <br>
+
+          <label for="preNote">Pre Note</label>
+          <input id="preNote" type="text" formControlName="preNote">
+          <br> <br>
+
+          <label for="postNote">Post Note</label>
+          <input id="postNote" type="text" formControlName="postNote">
+          <br> <br>
+
+        </div>
+        <div class="form-group">
+          <label for="head">Titre du document</label>
+          <input id="head" type="text" formControlName="head" [(ngModel)]="title">
+          <br> <br>
+          <h2>{{title}}</h2>
+
+          <br> <br>
+
+          <div>
+            <input type="checkbox" id="remise" name="remise" formControlName="discount">
+            <label for="discount">Remise</label>
+          </div>
+          <br> <br>
+
+          <fieldset>
+            <legend>Base de calcul</legend>
+
+            <div>
+              <input type="checkbox" id="discount_on_total" name="discount_on_total" formControlName="discount_on_total"
+                checked>
+              <label for="discount_on_total">Total</label>
+            </div>
+
+            <div>
+              <input type="checkbox" id="discount_fixed_value" name="discount_fixed_value">
+              <label for="discount_fixed_value">Par ligne</label>
+            </div>
+          </fieldset>
+          <div>
+            <legend>Base de remise</legend>
+            <input type="checkbox" id="discount_base_ttc" name="discount_base_ttc" formControlName="discount_base_ttc">
+            <label for="discount_base_ttc">Base TTC</label>
+          </div>
+          <label for="cars">Language:</label>
+
+          <select class="form-control col-lg-8" (change)="onChangeLanguage($event)" required>
+            <option *ngFor="let language of languagesList" [value]="language.code">
+              {{language.name}}
+            </option>
+          </select>
+
+          <br> <br>
+          <label for="cars">Currency:</label>
+
+          <select class="form-control col-lg-8" (change)="onChangeCurrency($event)" required>
+            <option *ngFor="let currency of currenciesList" [value]="currency.code">
+              {{currency.name}} ({{currency.shortname}})
+            </option>
+          </select>
+
+        </div>
+      </div>
+  </form>    
+      <form [formGroup]="addmore" #indentAddForm=ngForm  > 
+        <div class="row">
+          <div class="col-sm-12 table-responsive" formArrayName="itemRows">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="white-space: nowrap;padding-right: 4em;float:center"><span
+                      class="required-field"></span>Description</th>
+                  <th style="white-space: nowrap;padding-right: 4em;float:center">Prix </th>
+                  <th style="white-space: nowrap;padding-right: 4em;float:center">Qté </th>
+                  <th style="white-space: nowrap;padding-right: 4em;float:center">Unité</th>
+                  <th style="white-space: nowrap;padding-right: 4em;float:center">Remise</th>
+                  <th style="white-space: nowrap;padding-right: 4em;float:center">TVA</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let itemrow of addmore.controls.itemRows['controls']; let i=index" [formGroupName]="i">
+
+                  <td style="white-space: nowrap;"> <input id="timeRange{{i}}" formControlName="Description"
+                      class="form-control"></td>
+                  <!-- <td style="white-space: nowrap;"> <input readonly id="learn{{i}}" formControlName="learn" class="form-control"></td> -->
+                  <!-- <td> <input formControlName="bf_stock" readonly id="bfStock{{i}}" class="form-control reset"></td> -->
+                  <td> <input id="Prix{{i}}" formControlName="Prix" class="form-control reset" /></td>
+                  <td> <input formControlName="Qté" class="form-control reset" /></td>
+                  <select class="form-control col-lg-8" (change)="onChangeUnity($event)" required>
+                    <option *ngFor="let unity of uitiesList" [value]="unity.code">
+                      {{unity.name}}
+                    </option>
+                  </select>
+                  <td> <input formControlName="Remise" class="form-control reset" /></td>
+                  <select class="form-control col-lg-8" (change)="onChangeVat($event)" required>
+                    <option *ngFor="let vat of vatsList" [value]="vat.code">
+                      {{vat.value}}
+                    </option>
+                  </select>
+
+                  <td> <button (click)="deleteRow(i)" class="btn btn-danger">delete<i class="fa fa-close"
+                        aria-hidden="true"></i></button></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td> <button type="button" (click)="addNewRow()" class="btn btn-primary"><i class="fa fa-plus-circle"
+                        aria-hidden="true"></i>Ajouter une ligne</button></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+        </div>
+
+        <button type="submit" class="button">Ajouter</button>
+      
+      </form>
+
+    
+  
+
+</body>
+

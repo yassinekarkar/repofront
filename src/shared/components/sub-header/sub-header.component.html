@@ -1,0 +1,22 @@
+<div class="sub-header center-horizontally space-between m-vertical-16 ">
+  <div class="sub-header-title center-horizontally position-just-left-horizontal align-center">
+    <button *ngIf="canGoBack" nz-button nzShape="circle" (click)="goBack()">
+      <em nz-icon class="p-right-8" nzType="arrow-left" nzTheme="outline"></em>
+    </button>
+    <h1 [class.p-left-12]="canGoBack"> {{ title | translate }}</h1>
+  </div>
+  <div class="btn-action">
+    <button  (click)="goTo()" class="btn-outline-bill m-right-10"  nz-button   [nzType]="'default'">
+     <img class="icon" src="./assets/images/icons/plus.svg" alt="icon"> {{'common.add' | translate}}
+    </button>
+    <button  class="btn-outline-bill m-right-10"  nz-button [nzType]="'default'">
+      <img class="icon" src="./assets/images/icons/telecharger.svg" alt="icon">{{'buttons.download' | translate}}
+    </button>
+    <button  class="btn-outline-bill " nz-button    [nzType]="'default'">
+      <img class="icon"  src="./assets/images/icons/importer.svg" alt="icon"> {{'buttons.upload' | translate}}
+    </button>
+  </div>
+
+</div>
+
+<el-bill-search-bar></el-bill-search-bar>

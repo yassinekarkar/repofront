@@ -1,0 +1,100 @@
+<div
+  class="
+    el-bill-table
+    full-width
+    center-vertically
+    position-align-right-vertical
+  "
+>
+  <nz-table
+    id="content"
+    class="full-width"
+    [nzBordered]="false"
+    #sortTable
+    [nzShowPagination]="false"
+    [(nzPageSize)]="pageSize"
+    [(nzPageIndex)]="current"
+
+    nzSize="small"
+    [nzData]="listOfData.data"
+  >
+    <thead>
+    <tr>
+      <th class="p-10"
+        scope="col"
+        *ngFor="let header of listOfData.header; let i = index"
+      >
+       <span *ngIf="header.name !== 'unity_name'">  {{ "tableColumns." + header.name | translate }}</span>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr  *ngFor="let data of sortTable.data;"   >
+      <td *ngFor="let header of listOfData.header">
+
+        <div *ngIf="header.name !== 'actions' && header.name !== 'status'
+        && header.name !== 'un_payed_bill'  && header.name !== 'payed_bill'
+        && header.name !== 'unity_name'&& header.name !== 'logo' "
+             class="column p-10">
+          {{data[header.name]}}
+        </div>
+
+        <div *ngIf="header.name === 'payed_bill' || header.name === 'un_payed_bill' " class="column p-10">
+           {{data[header.name]}}  {{data['unity_name']}}
+        </div>
+
+        <div *ngIf="header.name === 'status'" class="column p-10">
+           <span class=" badge " [ngClass]="{'badge-success' : data[header.name] === 'PAIED' , 'badge-draft' : data[header.name] === 'DRAFT' } "> {{data[header.name]}} </span>
+        </div>
+        <div *ngIf="header.name === 'logo'" class="column image p-10">
+          <nz-avatar nzIcon="user" [nzSrc]="data[header.name]"  (error)="onImgError($event)" [nzAlt]="data[header.name]"></nz-avatar>
+        </div>
+
+        <div *ngIf="header.name === 'actions'" class="column">
+          <button *ngIf="header.name === 'actions'" nzType="text"  nzTrigger="click" nz-button nz-dropdown [nzDropdownMenu]="actionsMenu"
+                  nzPlacement="bottomLeft" [nzOverlayClassName]="'dropDown-table'">
+            <em nz-icon nzType="more" nzTheme="outline"></em>
+          </button>
+          <nz-dropdown-menu #actionsMenu="nzDropdownMenu">
+            <ul nz-menu *ngIf="header.name ==='actions'">
+              <li *ngFor="let action of listOfData[header.name]"  (click)="action.fn(data)"    nz-menu-item><em nz-icon [nzType]="action.icon" ></em>{{action.name | translate}}
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+
+
+
+      </td>
+
+    </tr>
+    <tr class="total" *ngIf="dataFrom == 'client'">
+      <td class="tot">
+        Total
+      </td>
+      <td >
+
+      </td>
+      <td class="facture" >
+        {{totalFac}} DT
+      </td>
+      <td class="facture" >
+        {{totalFac}} DT
+      </td>
+      <td >
+
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+
+
+  <el-bill-pagination
+    [current]="current"
+    (pageIndexChangeEmitter)="onPageIndexChange($event)"
+    (pageSizeChangeEmitter)="onPageSizeChange($event)"
+    [total]="total"
+    [pageSize]="pageSize"
+  ></el-bill-pagination>
+</div>
+<el-bill-total [total]="800"></el-bill-total>
